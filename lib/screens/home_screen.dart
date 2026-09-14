@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:flutter_sharing_intent/flutter_sharing_intent.dart';
+import 'package:flutter_sharing_intent/model/sharing_file.dart';
 import '../services/scraper_service.dart';
 import '../services/llm_service.dart';
 import '../models/authenticity_result.dart';
@@ -33,22 +34,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _initSharingIntent() {
     // Listen to media sharing coming from outside the app while the app is in the memory.
-    _intentSubscription = ReceiveSharingIntent.instance.getMediaStream().listen((List<SharedMediaFile> value) {
+    _intentSubscription = FlutterSharingIntent.instance.getMediaStream().listen((List<SharedFile> value) {
       if (value.isNotEmpty) {
-        final sharedString = value.first.path; // Usually URL is in path for text sharing
-        _handleIncomingUrl(sharedString);
+        final sharedString = value.first.value; // Usually URL is in value for text sharing
+        if (sharedString != null) _handleIncomingUrl(sharedString);
       }
     }, onError: (err) {
       debugPrint("getLinkStream error: $err");
     });
 
     // Get the media sharing coming from outside the app while the app is closed.
-    ReceiveSharingIntent.instance.getInitialMedia().then((List<SharedMediaFile> value) {
+    FlutterSharingIntent.instance.getInitialSharing().then((List<SharedFile> value) {
       if (value.isNotEmpty) {
-        final sharedString = value.first.path;
-        _handleIncomingUrl(sharedString);
+        final sharedString = value.first.value;
+        if (sharedString != null) _handleIncomingUrl(sharedString);
       }
-      ReceiveSharingIntent.instance.reset();
     });
   }
 
