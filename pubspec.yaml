@@ -36,9 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_sharing_intent: ^2.0.4
   http: ^1.6.0
-  google_generative_ai: ^0.4.7
   flutter_dotenv: ^6.0.1
   google_fonts: ^8.2.1
+  html: ^0.15.7
 
 dev_dependencies:
   flutter_test:
